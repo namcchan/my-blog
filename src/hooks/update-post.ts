@@ -1,6 +1,6 @@
+import { updatePost } from '@/actions/post';
 import { useMutation, UseMutationOptions } from '@tanstack/react-query';
 import { z } from 'zod';
-import { updatePost } from '../actions/actions';
 
 export const updatePostSchema = z.object({
   title: z.string().min(1),

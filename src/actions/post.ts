@@ -1,9 +1,84 @@
 'use server';
 
 import { auth } from '@/auth';
-import { UpdatePostSchema } from '@/features/post/api/update-post';
+import { UpdatePostSchema } from '@/hooks/update-post';
 import prisma from '@/lib/prisma';
 import { getSignedUrlForS3Object } from '@/lib/s3-storage';
+
+export const getPostsPublic = async (query?: {
+  page?: number;
+  limit?: number;
+  search?: string;
+}) => {
+  let page = query?.page ?? 1;
+  if (page < 1) page = 1;
+  const skip = (page - 1) * (query?.limit ?? 20);
+  const take = query?.limit ?? 20;
+
+  const posts = await prisma.post.findMany({
+    where: {
+      published: true,
+      status: 'published',
+    },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      image: true,
+      description: true,
+      createdAt: true,
+      updatedAt: true,
+      author: {
+        select: {
+          id: true,
+          name: true,
+          image: true,
+        },
+      },
+      category: {
+        select: {
+          id: true,
+          title: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+
+    take: take,
+    skip: skip,
+  });
+
+  const count = await prisma.post.count({ where: { published: true } });
+
+  return {
+    data: posts,
+    count,
+    totalPage: Math.ceil(count / take),
+  };
+};
+
+export const getPostBySlug = (slug: string) => {
+  return prisma.post.findFirst({
+    where: { slug, published: true, status: 'published' },
+    include: {
+      author: {
+        select: {
+          id: true,
+          name: true,
+          image: true,
+        },
+      },
+      category: {
+        select: {
+          id: true,
+          title: true,
+        },
+      },
+    },
+  });
+};
 
 export const getCategories = async () => {
   return prisma.category.findMany();

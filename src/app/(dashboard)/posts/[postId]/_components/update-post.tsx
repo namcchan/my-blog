@@ -25,7 +25,6 @@ import { ArrowLeft, SparklesIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import slugify from 'react-slugify';
-import { updatePostSchema, UpdatePostSchema } from '../api/update-post';
 import WysiwygEditor from './wysiwyg/wysiwyg-editor';
 import { Category, Post } from '@prisma/client';
 import {
@@ -38,11 +37,11 @@ import {
 import _ from 'lodash';
 import Image from 'next/image';
 import { v4 as uuid } from 'uuid';
-import { createUploadUrl } from '@/actions/post';
+import { createUploadUrl, updatePost } from '@/actions/post';
 import { useLoadingDialog } from '@/hooks/useLoading';
 import { toast } from 'sonner';
-import { updatePost } from '../actions/actions';
 import { useRouter } from 'next/navigation';
+import { updatePostSchema, UpdatePostSchema } from '@/hooks/update-post';
 
 export type UpdatePostProps = {
   post: Post;
@@ -259,6 +258,9 @@ const UpdatePost = ({ post, categories }: UpdatePostProps) => {
                   </FormLabel>
                   <FormControl>
                     <WysiwygEditor
+                      editorProps={{
+                        editable: () => false,
+                      }}
                       defaultValue={field.value ? JSON.parse(field.value) : ''}
                       onDebouncedUpdate={(editor) => {
                         field.onChange(JSON.stringify(editor?.getJSON()));
