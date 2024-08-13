@@ -1,21 +1,21 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:15
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: blog
+  cockroachdb:
+    image: cockroachdb/cockroach:v23.1.2
+    container_name: cockroachdb
+    command: start-single-node --insecure --advertise-addr=cockroachdb
     ports:
-      - '5432:5432'
+      - '26257:26257' # Cổng dành cho client
+      - '8080:8080' # Cổng dành cho giao diện web (Admin UI)
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - cockroachdb-data:/cockroach/cockroach-data
     networks:
-      - postgres_network
+      - cockroach-network
 
 volumes:
-  pgdata:
+  cockroachdb-data:
 
 networks:
-  postgres_network:
+  cockroach-network:
+    driver: bridge
