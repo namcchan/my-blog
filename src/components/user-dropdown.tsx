@@ -23,7 +23,9 @@ export const UserDropdown = ({ session }: { session: Session | null }) => {
           <Link href="/posts">Posts</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+        <DropdownMenuItem onClick={() => handleLogout()}>
+          Logout
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -176,6 +176,21 @@ export const handleDeletePost = async (id: string) => {
 export const handlePublishPost = async (id: string) => {
   const session = await auth();
 
+  const post = await prisma.post.findUnique({
+    where: {
+      id: id,
+      authorId: session?.user?.id,
+    },
+  });
+
+  if (!post) {
+    throw new Error('Post not found');
+  }
+
+  if (!post.content || !post.title || !post.image || !post.description) {
+    throw new Error('Post content is missing');
+  }
+
   return prisma.post.update({
     where: {
       id: id,
