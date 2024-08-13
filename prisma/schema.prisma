@@ -84,19 +84,24 @@ model Category {
   title     String
   slug      String   @unique
   createdAt DateTime @default(now())
+
+  posts Post[]
 }
 
 model Post {
   id          String   @id @default(cuid())
   authorId    String
-  title       String
-  slug        String   @unique
-  image       String
-  content     String
-  description String
+  categoryId  String?
+  title       String?
+  slug        String?
+  image       String?
+  content     String?
+  description String?
+  status      String   @default("draft")
   published   Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author   User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  category Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 }

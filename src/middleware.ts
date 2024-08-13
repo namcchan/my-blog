@@ -4,7 +4,6 @@ import { authConfig } from './lib/authConfig';
 
 const publicRoutes = ['/', '/posts'];
 const authRoutes = ['/sign-in'];
-// const privateRoutes = ['/dashboard'];
 
 const { auth } = NextAuth(authConfig);
 

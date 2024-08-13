@@ -1,0 +1,9 @@
+-- DropIndex
+DROP INDEX "Post_slug_key";
+
+-- AlterTable
+ALTER TABLE "Post" ALTER COLUMN "title" DROP NOT NULL,
+ALTER COLUMN "slug" DROP NOT NULL,
+ALTER COLUMN "image" DROP NOT NULL,
+ALTER COLUMN "content" DROP NOT NULL,
+ALTER COLUMN "description" DROP NOT NULL;
