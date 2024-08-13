@@ -13,9 +13,6 @@ export default async function Home({
   searchParams: Record<string, string>;
 }) {
   const page = parseInt(searchParams?.page ?? 1);
-
-  console.log(page <= 1);
-
   const { data, totalPage } = await getPostsPublic({ page });
 
   return (
