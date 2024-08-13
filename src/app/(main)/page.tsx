@@ -17,18 +17,18 @@ export default async function Home({
 
   return (
     <>
-      <div className="grid">
+      <div className="grid gap-6">
         {data?.map((post) => (
           <Link href={`/articles/${post.slug}`} key={post.id}>
             <Card>
               <CardContent className="p-4">
-                <div className="flex gap-6 items-start">
+                <div className="flex flex-col md:flex-row gap-6 items-start">
                   <Image
                     src={post.image!}
                     alt={post.title!}
                     width={200}
                     height={1}
-                    className="rounded-lg"
+                    className="rounded-lg mx-auto md:mx-0"
                   />
                   <div className="">
                     <div className="flex gap-2 mb-2 items-center">
