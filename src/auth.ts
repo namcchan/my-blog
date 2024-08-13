@@ -2,11 +2,15 @@ import NextAuth from 'next-auth';
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { PrismaClient } from '@prisma/client';
 import { getUserById } from './features/user/actions';
+import { authConfig } from './lib/authConfig';
 
 const prisma = new PrismaClient();
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: 'jwt' },
+  pages: {
+    signIn: '/sign-in',
+  },
   adapter: PrismaAdapter(prisma),
   callbacks: {
     session({ session, token }) {
@@ -22,5 +26,5 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return token.token;
     },
   },
-  providers: [],
+  ...authConfig,
 });
