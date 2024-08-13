@@ -1,16 +1,16 @@
-import Moveable from "react-moveable";
+import Moveable from 'react-moveable';
 
-export const ImageResizer = ({ editor }) => {
+export const ImageResizer = ({ editor }: any) => {
   const updateMediaSize = () => {
     const imageInfo = document.querySelector(
-      ".ProseMirror-selectednode",
+      '.ProseMirror-selectednode'
     ) as HTMLImageElement;
     if (imageInfo) {
       const selection = editor.state.selection;
       editor.commands.setImage({
         src: imageInfo.src,
-        width: Number(imageInfo.style.width.replace("px", "")),
-        height: Number(imageInfo.style.height.replace("px", "")),
+        width: Number(imageInfo.style.width.replace('px', '')),
+        height: Number(imageInfo.style.height.replace('px', '')),
       });
       editor.commands.setNodeSelection(selection.from);
     }
@@ -19,7 +19,7 @@ export const ImageResizer = ({ editor }) => {
   return (
     <>
       <Moveable
-        target={document.querySelector(".ProseMirror-selectednode") as any}
+        target={document.querySelector('.ProseMirror-selectednode') as any}
         container={null}
         origin={false}
         /* Resize event edges */
@@ -53,7 +53,7 @@ export const ImageResizer = ({ editor }) => {
         scalable={true}
         throttleScale={0}
         /* Set the direction of resizable */
-        renderDirections={["w", "e"]}
+        renderDirections={['w', 'e']}
         onScale={({
           target,
           // scale,
