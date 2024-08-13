@@ -41,15 +41,16 @@ export default function WysiwygEditor({
     onDebouncedUpdate(editor);
   }, debounceDuration);
 
-  if (!editable) {
-    editorProps.editable = () => false;
-  }
-
   const editor = useEditor({
     extensions: [...defaultExtensions, ...extensions],
     editorProps: {
       ...defaultEditorProps,
       ...editorProps,
+      ...(!editable && {
+        editable(state) {
+          return false;
+        },
+      }),
     },
     immediatelyRender: true,
     onUpdate: (e) => {

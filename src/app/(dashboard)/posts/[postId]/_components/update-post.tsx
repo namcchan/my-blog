@@ -258,9 +258,7 @@ const UpdatePost = ({ post, categories }: UpdatePostProps) => {
                   </FormLabel>
                   <FormControl>
                     <WysiwygEditor
-                      editorProps={{
-                        editable: () => false,
-                      }}
+                      editable
                       defaultValue={field.value ? JSON.parse(field.value) : ''}
                       onDebouncedUpdate={(editor) => {
                         field.onChange(JSON.stringify(editor?.getJSON()));
