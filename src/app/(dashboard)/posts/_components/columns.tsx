@@ -116,7 +116,7 @@ export const columns: ColumnDef<Post & { category: Category }>[] = [
     cell: ({ row }) => {
       const post = row.original;
 
-      return <DataTableColumnActions id={post.id} />;
+      return <DataTableColumnActions post={post} />;
     },
   },
 ];

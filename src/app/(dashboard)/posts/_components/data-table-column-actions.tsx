@@ -1,4 +1,8 @@
-import { handleDeletePost } from '@/actions/post';
+import {
+  handleDeletePost,
+  handleDraftPost,
+  handlePublishPost,
+} from '@/actions/post';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,12 +21,13 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useDisclosure } from '@/hooks/useDisclosure';
 import { useLoadingDialog } from '@/hooks/useLoading';
+import { Post } from '@prisma/client';
 import { DropdownMenuTrigger } from '@radix-ui/react-dropdown-menu';
 import { Loader2, MoreHorizontal, Trash2Icon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
-export const DataTableColumnActions = ({ id }: { id: string }) => {
+export const DataTableColumnActions = ({ post }: { post: Post }) => {
   const router = useRouter();
   const { setLoadingDialog } = useLoadingDialog();
 
@@ -31,14 +36,14 @@ export const DataTableColumnActions = ({ id }: { id: string }) => {
 
   const handleEdit = () => {
     setLoadingDialog(true);
-    router.push(`/posts/${id}`);
+    router.push(`/posts/${post.id}`);
     setLoadingDialog(false);
   };
 
   const handleDelete = async () => {
     onDeleting();
     try {
-      await handleDeletePost(id);
+      await handleDeletePost(post.id);
       toast.success('Post deleted successfully');
       router.refresh();
       onDeleteAlert();
@@ -46,6 +51,30 @@ export const DataTableColumnActions = ({ id }: { id: string }) => {
       toast.error('Something went wrong');
     } finally {
       onDeleting();
+    }
+  };
+
+  const publishPost = async () => {
+    setLoadingDialog(true);
+    try {
+      await handlePublishPost(post.id);
+      toast.success('Post published successfully');
+      router.refresh();
+    } catch (e) {
+    } finally {
+      setLoadingDialog(false);
+    }
+  };
+
+  const draftPost = async () => {
+    setLoadingDialog(true);
+    try {
+      await handleDraftPost(post.id);
+      toast.success('Post drafted successfully');
+      router.refresh();
+    } catch (e) {
+    } finally {
+      setLoadingDialog(false);
     }
   };
 
@@ -59,7 +88,11 @@ export const DataTableColumnActions = ({ id }: { id: string }) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem>Publish</DropdownMenuItem>
+          {post.published ? (
+            <DropdownMenuItem onClick={draftPost}>Draft</DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem onClick={publishPost}>Publish</DropdownMenuItem>
+          )}
           <DropdownMenuItem onClick={handleEdit}>Edit</DropdownMenuItem>
           <DropdownMenuItem onClick={() => onDeleteAlert()}>
             Delete

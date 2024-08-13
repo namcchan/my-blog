@@ -97,3 +97,33 @@ export const handleDeletePost = async (id: string) => {
     },
   });
 };
+
+export const handlePublishPost = async (id: string) => {
+  const session = await auth();
+
+  return prisma.post.update({
+    where: {
+      id: id,
+      authorId: session?.user?.id,
+    },
+    data: {
+      published: true,
+      status: 'published',
+    },
+  });
+};
+
+export const handleDraftPost = async (id: string) => {
+  const session = await auth();
+
+  return prisma.post.update({
+    where: {
+      id: id,
+      authorId: session?.user?.id,
+    },
+    data: {
+      published: false,
+      status: 'draft',
+    },
+  });
+};
